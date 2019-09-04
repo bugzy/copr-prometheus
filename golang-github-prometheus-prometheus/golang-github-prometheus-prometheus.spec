@@ -1,6 +1,11 @@
 # Run tests (requires network connectivity)
 %global with_check 0
 
+# Prebuilt binaries break build process for CentOS. Disable debug packages to resolve
+%if 0%{?rhel}
+%define debug_package %{nil}
+%endif
+
 %global provider        github
 %global provider_tld    com
 %global project         prometheus
@@ -17,6 +22,7 @@ License:        ASL 2.0
 URL:            https://%{provider_prefix}
 Source0:        https://%{provider_prefix}/archive/v%{version}.tar.gz
 Source1:        prometheus.service
+Source2:        https://%{provider_prefix}/releases/download/v%{version}/prometheus-%{version}.linux-amd64.tar.gz
 
 Provides:       prometheus = %{version}-%{release}
 
@@ -49,23 +55,34 @@ Prometheus' main distinguishing features as compared to other monitoring systems
 %setup -q -n %{repo}-%{version}
 
 %build
+%if 0%{?rhel}
+mkdir _prebuilt
+tar -xf %{SOURCE2} -C _prebuilt
+%else
 export GO111MODULE=on
 cd cmd/prometheus
 go build -ldflags=-linkmode=external -mod vendor -o prometheus
 cd ../promtool
 go build -ldflags=-linkmode=external -mod vendor -o promtool
+%endif
 
 %install
 %if 0%{?rhel} != 6
 install -d -p   %{buildroot}%{_unitdir}
 %endif
 
+%if 0%{?rhel}
+install -Dpm 0644 _prebuilt/prometheus-%{version}.linux-amd64/prometheus.yml %{buildroot}%{_sysconfdir}/prometheus/prometheus.yml
+install -Dpm 0755 _prebuilt/prometheus-%{version}.linux-amd64/prometheus %{buildroot}%{_sbindir}/prometheus
+install -Dpm 0755 _prebuilt/prometheus-%{version}.linux-amd64/promtool %{buildroot}%{_bindir}/promtool
+%else
 install -Dpm 0644 documentation/examples/prometheus.yml %{buildroot}%{_sysconfdir}/prometheus/prometheus.yml
+install -Dpm 0755 cmd/prometheus/prometheus %{buildroot}%{_sbindir}/prometheus
+install -Dpm 0755 cmd/promtool/promtool %{buildroot}%{_bindir}/promtool
+%endif
 %if 0%{?rhel} != 6
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_unitdir}/prometheus.service
 %endif
-install -Dpm 0755 cmd/prometheus/prometheus %{buildroot}%{_sbindir}/prometheus
-install -Dpm 0755 cmd/promtool/promtool %{buildroot}%{_bindir}/promtool
 install -dm 0750 %{buildroot}%{_sharedstatedir}/prometheus/
 
 %if 0%{?with_check}
