@@ -1,0 +1,14 @@
+[Unit]
+Description=The Prometheus monitoring system and time series database.
+After=syslog.target network.target
+
+[Service]
+Type=simple
+RemainAfterExit=no
+User=prometheus
+Group=prometheus
+ExecStart=/usr/sbin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path="/var/lib/prometheus/" --log.level info
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
