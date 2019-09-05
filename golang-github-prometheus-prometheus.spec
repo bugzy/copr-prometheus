@@ -99,21 +99,18 @@ go test -mod vendor
 %if 0%{?rhel} != 6
 %{_unitdir}/prometheus.service
 %endif
-%config(noreplace) %{_sysconfdir}/prometheus/prometheus.yml
+%attr(0640, prometheus, prometheus) %config(noreplace) %{_sysconfdir}/prometheus/prometheus.yml
 %license LICENSE
 %doc README.md CHANGELOG.md docs/
-%dir %{_sharedstatedir}/prometheus/
+%attr(0750, prometheus, prometheus) %dir %{_sharedstatedir}/prometheus/
 %{_sbindir}/prometheus
 %{_bindir}/promtool
 
 %pre
 getent group prometheus > /dev/null || groupadd -r prometheus
 getent passwd prometheus > /dev/null || \
-    useradd -rg prometheus -d /var/lib/prometheus -s /sbin/nologin \
+    useradd -rg prometheus -s /sbin/nologin \
             -c "Prometheus monitoring system" prometheus
-mkdir -p /var/lib/prometheus/tsdb
-chgrp prometheus /var/lib/prometheus/tsdm
-chmod 771 /var/lib/prometheus/tsdm
 
 %post
 %if 0%{?rhel} != 6
