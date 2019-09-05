@@ -8,8 +8,8 @@ RemainAfterExit=no
 User=prometheus
 Group=prometheus
 ExecStart=/usr/sbin/prometheus \
-    --config.file="/etc/prometheus/prometheus.yml" \
-    --storage.tsdb.path="/var/lib/prometheus/" \
+    --config.file=/etc/prometheus/prometheus.yml \
+    --storage.tsdb.path=/var/lib/prometheus/ \
     --log.level info
 ExecReload=/bin/kill -HUP $MAINPID
 
