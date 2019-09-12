@@ -16,7 +16,7 @@
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        2.12.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The Prometheus monitoring system and time series database
 License:        ASL 2.0
 URL:            https://%{provider_prefix}
@@ -109,7 +109,7 @@ go test -mod vendor
 %pre
 getent group prometheus > /dev/null || groupadd -r prometheus
 getent passwd prometheus > /dev/null || \
-    useradd -rg prometheus -s /sbin/nologin \
+    useradd -Mrg prometheus -s /sbin/nologin \
             -c "Prometheus monitoring system" prometheus
 
 %post
@@ -128,3 +128,5 @@ getent passwd prometheus > /dev/null || \
 %endif
 
 %changelog
+* Thu Sep 12 2019 Ben Reedy <breed808@breed808.com> - 2.12.0-2
+- Disable creation of home directory for prometheus user
