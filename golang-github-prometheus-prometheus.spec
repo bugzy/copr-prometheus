@@ -15,8 +15,8 @@
 %global import_path     %{provider_prefix}
 
 Name:           golang-%{provider}-%{project}-%{repo}
-Version:        2.12.0
-Release:        2%{?dist}
+Version:        2.14.0
+Release:        1%{?dist}
 Summary:        The Prometheus monitoring system and time series database
 License:        ASL 2.0
 URL:            https://%{provider_prefix}
@@ -128,5 +128,8 @@ getent passwd prometheus > /dev/null || \
 %endif
 
 %changelog
+* Thu Nov 21 2019 Bugzy Little <bugzylittle@gmail.com> - 2.14.0-1
+- Update to version 2.14
+
 * Thu Sep 12 2019 Ben Reedy <breed808@breed808.com> - 2.12.0-2
 - Disable creation of home directory for prometheus user
