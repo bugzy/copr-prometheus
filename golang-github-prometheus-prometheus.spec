@@ -128,6 +128,9 @@ getent passwd prometheus > /dev/null || \
 %endif
 
 %changelog
+* Mon Mar 16 2020 Bugzy Little <bugzylittle@gmail.com> - 2.17.0-1
+- Update to version 2.17
+
 * Thu Nov 21 2019 Bugzy Little <bugzylittle@gmail.com> - 2.14.0-1
 - Update to version 2.14
 
