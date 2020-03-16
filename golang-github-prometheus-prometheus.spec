@@ -15,7 +15,7 @@
 %global import_path     %{provider_prefix}
 
 Name:           golang-%{provider}-%{project}-%{repo}
-Version:        2.17.0
+Version:        2.16.0
 Release:        1%{?dist}
 Summary:        The Prometheus monitoring system and time series database
 License:        ASL 2.0
@@ -128,8 +128,8 @@ getent passwd prometheus > /dev/null || \
 %endif
 
 %changelog
-* Mon Mar 16 2020 Bugzy Little <bugzylittle@gmail.com> - 2.17.0-1
-- Update to version 2.17
+* Mon Mar 16 2020 Bugzy Little <bugzylittle@gmail.com> - 2.16.0-1
+- Update to version 2.16
 
 * Thu Nov 21 2019 Bugzy Little <bugzylittle@gmail.com> - 2.14.0-1
 - Update to version 2.14
