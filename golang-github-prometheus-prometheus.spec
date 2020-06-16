@@ -55,7 +55,7 @@ Prometheus' main distinguishing features as compared to other monitoring systems
 %setup -q -n %{repo}-%{version}
 
 %build
-%if 0%{?rhel}
+%if 0%{?rhel} != 6
 mkdir _prebuilt
 tar -xf %{SOURCE2} -C _prebuilt
 %else
@@ -105,6 +105,7 @@ go test -mod vendor
 %attr(0750, prometheus, prometheus) %dir %{_sharedstatedir}/prometheus/
 %{_sbindir}/prometheus
 %{_bindir}/promtool
+%{_bindir}/tsdb
 
 %pre
 getent group prometheus > /dev/null || groupadd -r prometheus
